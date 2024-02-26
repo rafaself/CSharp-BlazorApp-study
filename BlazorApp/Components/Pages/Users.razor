@@ -1,0 +1,85 @@
+﻿@page "/Users"
+@rendermode InteractiveServer
+
+<h3>Lista de usuários</h3>
+
+<ul>
+	@foreach (var user in users)
+	{
+		<li>Nome: @user.Name - Idade: @user.Age</li>
+	}
+</ul>
+
+<hr>
+
+<div class="input-container">
+	<span>Nome</span>
+	<input type="text" @bind="name" id="name-input" />
+</div>
+
+<div class="input-container">
+	<span>Idade</span>
+	<input type="number" @bind="age" id="age-input" max="100" />
+</div>
+
+<div class="button-container">
+	<button @onclick="addUser" class="my-button">Adicionar usuário</button>
+</div>
+
+<style>
+	.button-container {
+		margin-top: 21px;
+	}
+
+	.my-button {
+		border: transparent;
+		border-radius: 6px;
+		padding: 9px;
+		background-color: rgba(1, 38, 119, 0.9);
+		color: rgb(240, 240, 240);
+		transition: box-shadow 0.15s ease-in-out
+	}
+
+		.my-button:hover {
+			box-shadow: 0px 0px 6px 3px rgba(180, 180, 180, 0.9);
+		}
+
+	.input-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		margin: 9px 0;
+	}
+
+	input {
+		border: solid 1px rgba(20, 20, 20, 0.5);
+		border-radius: 6px;
+		transition: box-shadow 1s ease;
+		max-width: 200px;
+	}
+
+		input:focus {
+			outline: none;
+			box-shadow: 0px 0px 5px 1px rgba(180, 180, 180, 0.9);
+		}
+
+	#age-input {
+		width: 50px;
+	}
+</style>
+
+@code {
+	string name = "";
+	int age;
+	List<User> users = [];
+
+	void addUser()
+	{
+		if (!string.IsNullOrWhiteSpace(name) && age > 0)
+		{
+			users.Add(new User(name, age));
+			name = "";
+			age = 0;
+		}
+	}
+}
