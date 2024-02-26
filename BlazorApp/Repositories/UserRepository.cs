@@ -2,18 +2,20 @@
 
 namespace BlazorApp.Repositories;
 
-public class UserRepository(DbContext dbContext)
+public class UserRepository()
 {
-	DbContext _dbContext = dbContext;
-
-	public void Add(User user)
+	public async Task Add(User user)
 	{
-		_dbContext.Add(user);
+		await using var dbContext = new CustomDbContext();
+		dbContext.Add(user);
+		await dbContext.SaveChangesAsync();
 	}
 
 	public async Task<List<User>> List()
 	{
-		return await _dbContext
+		await using var dbContext = new CustomDbContext();
+
+		return await dbContext
 			.Set<User>()
 			.AsNoTracking()
 			.OrderBy(user => user.Id)

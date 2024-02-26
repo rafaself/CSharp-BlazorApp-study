@@ -12,6 +12,11 @@ public class CustomDbContext : DbContext
 
 	}
 
+	public CustomDbContext(DbContextOptions<CustomDbContext> options) : base(options)
+	{
+
+	}
+
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		string connectionString = "User ID=root;Password=rafa123;Host=localhost;Port=5432;Database=entitystudy;";
