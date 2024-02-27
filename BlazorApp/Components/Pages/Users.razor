@@ -1,6 +1,8 @@
 ﻿@page "/Users"
-@using BlazorApp.Repositories
 @rendermode InteractiveServer
+
+@using BlazorApp.Repositories
+@inject UserRepository userRepository
 
 <h3>Lista de usuários</h3>
 
@@ -73,25 +75,23 @@
 	string name = "";
 	int age;
 
-	UserRepository userRepository = new UserRepository();
-
 	List<User> users = new List<User>();
 
-	protected override async void OnInitialized()
-	{
-		users = await userRepository.List();
-		StateHasChanged();
-	}
+	protected async Task ListUsers() => users = await userRepository.List();
 
-	public async void addUser()
+	protected async void addUser()
 	{
 		if (!string.IsNullOrWhiteSpace(name) && age > 0)
 		{
 			await userRepository.Add(new User(name, age));
-			users = await userRepository.List();
+			await ListUsers();
 			name = "";
 			age = 0;
 		}
-		StateHasChanged();
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await ListUsers();
 	}
 }
